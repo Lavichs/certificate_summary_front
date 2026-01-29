@@ -9,8 +9,8 @@ module.exports = {
     entryPoints: [path.resolve(__dirname, '..', '..', 'src', 'index.jsx')],
     entryNames: 'index',
     bundle: true,
-    minify: isProd,
-    sourcemap: !isProd,
+    minify: false,
+    sourcemap: true,
     loader: {
         '.png': 'file',
         '.svg': 'file',

@@ -1,12 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CertificateService from "../api/CertificateService";
 import Modal from 'react-bootstrap/Modal';
 import {ACTIONS} from "../consts";
 import {Form} from "react-bootstrap";
 import ConfirmModal from "./ConfirmModal";
+import {AuthContext} from "../context";
 
 
 const List = () => {
+    const {isOperator, setIsOperator} = useContext(AuthContext)
+    // data
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -54,22 +57,16 @@ const List = () => {
 
     // for modal
     const openItem = (item) => {
-        console.log(item)
-        setIsShow(true)
-        setCurrentItem(item)
+        if (isOperator) {
+            setIsShow(true)
+            setCurrentItem(item)
+        }
     }
 
     const hideModal = () => setIsShow(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(event.target.cuks.value)
-        console.log(event.target.fio.value)
-        console.log(event.target.post.value)
-        console.log(event.target.organization.value)
-        console.log(event.target.dateInput.value)
-        console.log(event.target.inputGroupSelect01.value)
-        console.log(event.target.comment.value)
 
         const dataToSend = {
             "cert_center": event.target.cuks.value,
@@ -83,6 +80,8 @@ const List = () => {
 
         const response = await CertificateService.update(currentItem.id, dataToSend)
         //     ......
+        hideModal();
+        fetchData();
     }
 
     const deleteItem = async () => {
@@ -93,6 +92,7 @@ const List = () => {
         }
         hideConfirm();
         hideModal();
+        fetchData();
     }
 
 
