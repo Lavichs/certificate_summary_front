@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {CERTIFICATE_LOAD} from "../api/api_uri";
+import UserService from "../api/UserService";
+import CertificateService from "../api/CertificateService";
 
 const AdminPage = () => {
     const [file, setFile] = useState(null);
@@ -16,10 +18,11 @@ const AdminPage = () => {
         //         console.log(error);
         //     });
 
-        const resp = await fetch(CERTIFICATE_LOAD, {
-            method: "POST",
-            body: formData
-        });
+        // const resp = await fetch(CERTIFICATE_LOAD, {
+        //     method: "POST",
+        //     body: formData
+        // });
+        let res = await CertificateService.loadxlsx(formData)
     }
 
     return (

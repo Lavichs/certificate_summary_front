@@ -78,7 +78,12 @@ const List = () => {
             "comment": event.target.comment.value
         }
 
-        const response = await CertificateService.update(currentItem.id, dataToSend)
+        if (currentItem.id) {
+            const response = await CertificateService.update(currentItem.id, dataToSend)
+        }
+        else {
+            const response = await CertificateService.create(dataToSend)
+        }
         //     ......
         hideModal();
         fetchData();
@@ -100,11 +105,19 @@ const List = () => {
         <>
             <div className="container">
                 <input type="text"
-                       className="form-control mb-3"
+                       className="form-control my-3"
                        placeholder="Поиск..."
                        value={searchTerm}
                        onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                {
+                    isOperator &&
+                    <div className="container d-flex justify-content-center">
+                        <button className="btn btn-primary mb-3 w-25" onClick={() => openItem({})}>
+                            Создать
+                        </button>
+                    </div>
+                }
             </div>
             <div>
                 <ul className="list-group">
@@ -174,7 +187,6 @@ const List = () => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <p>{currentItem?.cert_center}</p>
                     <Form
                         noValidate
                         validated={validated}
@@ -284,7 +296,10 @@ const List = () => {
                         </div>
 
                         <div className="modal-footer d-flex justify-content-between">
-                            <button type="button" className="btn btn-danger me-2" onClick={showConfirm}>Удалить</button>
+                            {
+                                currentItem?.id &&
+                                <button type="button" className="btn btn-danger me-2" onClick={showConfirm}>Удалить</button>
+                            }
                             <p></p>
                             <div>
                                 <button type="button"

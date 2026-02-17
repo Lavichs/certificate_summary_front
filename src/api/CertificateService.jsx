@@ -1,4 +1,4 @@
-import {CERTIFICATE_URI} from "./api_uri";
+import {CERTIFICATE_LOAD, CERTIFICATE_URI} from "./api_uri";
 
 const axios = require('axios');
 
@@ -14,10 +14,16 @@ export default class CertificateService {
         // return await axios.get(CERTIFICATE_URI)
     }
     static async update(id, data) {
-        return await axios.put(CERTIFICATE_URI + `/` + String(id), data)
+        return await axios.put(CERTIFICATE_URI + `/` + String(id), data, {withCredentials: true})
     }
     static async delete(id) {
-        return await axios.delete(CERTIFICATE_URI + `/` + String(id))
+        return await axios.delete(CERTIFICATE_URI + `/` + String(id), {withCredentials: true})
+    }
+    static async create(data) {
+        return await axios.post(CERTIFICATE_URI + `/`, data, {withCredentials: true})
+    }
+    static async loadxlsx(data){
+        return await axios.post(CERTIFICATE_LOAD, data, {withCredentials: true})
     }
 
 
