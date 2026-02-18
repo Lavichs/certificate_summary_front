@@ -80,8 +80,7 @@ const List = () => {
 
         if (currentItem.id) {
             const response = await CertificateService.update(currentItem.id, dataToSend)
-        }
-        else {
+        } else {
             const response = await CertificateService.create(dataToSend)
         }
         //     ......
@@ -139,14 +138,22 @@ const List = () => {
                     </li>
                     {filteredData.map((item) => {
                         return (
-                            <li className="list-group-item btn btn-primary"
+                            <li className={
+                                item.expire_date ?
+                                    new Date(item.expire_date.split('T')[0]) < new Date() ?
+                                        "list-group-item btn btn-danger bg-danger text-white"
+                                        :
+                                        "list-group-item btn btn-primary"
+                                    :
+                                    'list-group-item btn btn-primary'
+                            }
                                 type="button"
                                 data-bs-toggle="modal"
                                 key={item.id}
                                 id={item.id}
                                 onClick={() => openItem(item)}
                             >
-                                <div className="d-flex w-100 justify-content-between">
+                                <div className="d-flex w-100 justify-content-between ">
                                     <div className="w-50 d-flex w-100 justify-content-around">
                                         <p className="mx-1 w-25 text-wrap">{item?.cert_center !== null ? item?.cert_center : "—"}</p>
                                         <p className="mx-1 w-25 text-wrap">{item?.fio}</p>
@@ -298,7 +305,8 @@ const List = () => {
                         <div className="modal-footer d-flex justify-content-between">
                             {
                                 currentItem?.id &&
-                                <button type="button" className="btn btn-danger me-2" onClick={showConfirm}>Удалить</button>
+                                <button type="button" className="btn btn-danger me-2"
+                                        onClick={showConfirm}>Удалить</button>
                             }
                             <p></p>
                             <div>
