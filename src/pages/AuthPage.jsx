@@ -1,18 +1,22 @@
 import React, {useContext} from 'react';
 import UserService from "../api/UserService";
 import {AuthContext} from "../context";
+import {useNavigate} from "react-router-dom";
+import {HOME_ROUTE} from "../consts";
 
 const AuthPage = () => {
+    const navigate = useNavigate();
     const {isOperator, setIsOperator} = useContext(AuthContext)
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            await UserService.login({
+            let res = await UserService.login({
                 "login": event.target.login.value,
                 "password": event.target.password.value
             })
-            setIsOperator(true)
+            setIsOperator(res.data.isOperator)
+            navigate(HOME_ROUTE)
         } catch (e) {
             // console.log(e.response.status)
         }

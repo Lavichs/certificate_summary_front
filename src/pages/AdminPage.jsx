@@ -1,28 +1,20 @@
 import React, {useState} from 'react';
-import {CERTIFICATE_LOAD} from "../api/api_uri";
-import UserService from "../api/UserService";
 import CertificateService from "../api/CertificateService";
 
 const AdminPage = () => {
     const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false)
+    const [finishLoading, setFinishLoading] = useState(false)
 
     const sendFile = async () => {
         const formData = new FormData();
         formData.append("uploaded_file", file)
 
-        // await axios.post(CERTIFICATE_LOAD, formData)
-        //     .then((response) => {
-        //         console.log(response.data);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
-
-        // const resp = await fetch(CERTIFICATE_LOAD, {
-        //     method: "POST",
-        //     body: formData
-        // });
+        setLoading(true)
         let res = await CertificateService.loadxlsx(formData)
+        setLoading(false)
+        setFinishLoading(true)
+        // setTimeout(() => setFinishLoading(false), 2000)
     }
 
     return (
@@ -37,6 +29,14 @@ const AdminPage = () => {
                 }/>
                 <button className="btn btn-success" onClick={sendFile}>Отправить</button>
             </div>
+            {
+                loading &&
+                <p className="text-primary">Загрузка....</p>
+            }
+            {
+                finishLoading &&
+                <p className="text-success">Загрузка завершена</p>
+            }
 
         </div>
     );
